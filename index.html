@@ -1,0 +1,2660 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HỆ THỐNG ĐIỀU PHIẾU MINH KHÔI - Phiên bản Demo</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Reset và Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+                 .nav-menu a:hover {
+             color: #667eea;
+         }
+         
+         .nav-menu a.active {
+             color: #667eea;
+             font-weight: 600;
+             position: relative;
+         }
+         
+         .nav-menu a.active::after {
+             content: '';
+             position: absolute;
+             bottom: -5px;
+             left: 0;
+             width: 100%;
+             height: 2px;
+             background: #667eea;
+             border-radius: 1px;
+         }
+         
+         /* Auth menu styling */
+         .auth-menu {
+             display: flex;
+             gap: 2rem;
+         }
+         
+         .user-menu {
+             display: flex;
+             gap: 2rem;
+         }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            margin: 0.25rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+                 .btn-danger {
+             background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+             color: white;
+         }
+         
+         .btn-danger:disabled {
+             background: linear-gradient(135deg, #ccc 0%, #999 100%);
+             color: #666;
+             cursor: not-allowed;
+         }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+            opacity: 0.8;
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            color: white;
+        }
+
+        /* Grid System */
+        .grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        /* Ticket Grid */
+        .ticket-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        }
+
+        .ticket-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid #667eea;
+        }
+
+        .ticket-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .ticket-number {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .ticket-priority {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .priority-thap { background: #e8f5e8; color: #2d5a2d; }
+        .priority-trung_binh { background: #fff3cd; color: #856404; }
+        .priority-cao { background: #f8d7da; color: #721c24; }
+        .priority-khan_cap { background: #f5c6cb; color: #721c24; }
+
+        .ticket-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+                 .status-pending { background: #fff3cd; color: #856404; }
+         .status-unassigned { background: #e2e3e5; color: #383d41; }
+         .status-assigned { background: #cce5ff; color: #004085; }
+         .status-in_progress { background: #d4edda; color: #155724; }
+         .status-completed { background: #d1e7dd; color: #0f5132; }
+         .status-cancelled { background: #f8d7da; color: #721c24; }
+
+        .ticket-info {
+            margin-bottom: 1rem;
+        }
+
+        .ticket-info h3 {
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .ticket-info p {
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+
+        .ticket-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border-left: 4px solid;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border-left-color: #28a745;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border-left-color: #dc3545;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border-left-color: #ffc107;
+        }
+
+        /* Login/Register Forms */
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .auth-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .auth-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #667eea;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        /* Dashboard Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-weight: 600;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+                 /* Tab Content */
+         .tab-content {
+             display: none;
+         }
+         
+         .tab-content.active {
+             display: block;
+         }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-menu {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .ticket-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .auth-card {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            .ticket-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 10px;
+            }
+            
+            .card {
+                padding: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                margin: 10% auto;
+                padding: 1rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* User Management */
+        .user-grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        }
+
+        .user-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-role {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .role-admin { background: #dc3545; color: white; }
+        .role-manager { background: #fd7e14; color: white; }
+        .role-sales { background: #20c997; color: white; }
+        .role-accountant { background: #17a2b8; color: white; }
+        .role-technician { background: #6f42c1; color: white; }
+        
+        /* User Profile Styles */
+        .profile-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+        }
+        
+        .profile-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #f8f9fa;
+        }
+        
+        .profile-avatar {
+            font-size: 4rem;
+            color: #667eea;
+            margin-right: 1.5rem;
+        }
+        
+        .profile-info h2 {
+            margin: 0 0 0.5rem 0;
+            color: #333;
+            font-size: 1.5rem;
+        }
+        
+        .profile-info p {
+            margin: 0.25rem 0;
+            color: #666;
+        }
+        
+        .profile-details {
+            margin-bottom: 2rem;
+        }
+        
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f8f9fa;
+        }
+        
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-item label {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .detail-item span {
+            color: #666;
+        }
+        
+        .profile-actions {
+            text-align: center;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .profile-actions .btn {
+            min-width: 140px;
+        }
+        
+        /* Form styles for edit mode */
+        #profile-edit-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        #profile-edit-form .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        #profile-edit-form .form-control,
+        #profile-edit-form .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        #profile-edit-form .form-control:focus,
+        #profile-edit-form .form-select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-tools"></i> HỆ THỐNG ĐIỀU PHIẾU MINH KHÔI
+                </div>
+                                 <nav>
+                     <ul class="nav-menu">
+                         <li><a href="#" onclick="showTab('dashboard')"><i class="fas fa-home"></i> Trang chủ</a></li>
+                         <li><a href="#" onclick="showTab('new-ticket')"><i class="fas fa-plus"></i> Tạo phiếu</a></li>
+                         <li><a href="#" onclick="showTab('user-management')"><i class="fas fa-users"></i> Quản lý nhân viên</a></li>
+                         
+                         <!-- Menu khi chưa đăng nhập -->
+                         <li class="auth-menu" id="auth-menu">
+                             <a href="#" onclick="showTab('login')"><i class="fas fa-sign-in-alt"></i> Đăng nhập</a>
+                             <a href="#" onclick="showTab('register')"><i class="fas fa-user-plus"></i> Đăng ký</a>
+                         </li>
+                         
+                         <!-- Menu khi đã đăng nhập -->
+                         <li class="user-menu" id="user-menu" style="display: none;">
+                             <a href="#" onclick="showTab('user-profile')">
+                                 <i class="fas fa-user-circle"></i> <span id="current-username">Người dùng</span>
+                             </a>
+                             <a href="#" onclick="logout()">
+                                 <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                             </a>
+                         </li>
+                     </ul>
+                 </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <div class="card">
+                    <h1 style="margin-bottom: 1rem; color: #667eea;">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </h1>
+                    
+                                         <!-- Thống kê -->
+                     <div class="stats-grid">
+                         <div class="stat-card">
+                             <div class="stat-number">0</div>
+                             <div class="stat-label">Tổng số phiếu</div>
+                         </div>
+                         <div class="stat-card">
+                             <div class="stat-number">0</div>
+                             <div class="stat-label">Chưa điều phiếu</div>
+                         </div>
+                         <div class="stat-card">
+                             <div class="stat-number">0</div>
+                             <div class="stat-label">Đang xử lý</div>
+                         </div>
+                         <div class="stat-card">
+                             <div class="stat-number">0</div>
+                             <div class="stat-label">Hoàn thành</div>
+                         </div>
+                     </div>
+                    
+                    <!-- Bộ lọc và tìm kiếm -->
+                    <div class="card" style="margin-bottom: 2rem;">
+                        <div class="grid grid-3">
+                            <div class="form-group">
+                                <label for="search-input" class="form-label">
+                                    <i class="fas fa-search"></i> Tìm kiếm
+                                </label>
+                                <input type="text" id="search-input" class="form-control" placeholder="Tìm theo số phiếu hoặc tên khách hàng...">
+                            </div>
+                            <div class="form-group">
+                                <label for="status-filter" class="form-label">
+                                    <i class="fas fa-filter"></i> Lọc theo trạng thái
+                                </label>
+                                <select id="status-filter" class="form-select">
+                                    <option value="">Tất cả trạng thái</option>
+                                    <option value="pending">Chờ xử lý</option>
+                                    <option value="assigned">Đã phân công</option>
+                                    <option value="in_progress">Đang xử lý</option>
+                                    <option value="completed">Hoàn thành</option>
+                                    <option value="cancelled">Đã hủy</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="priority-filter" class="form-label">
+                                    <i class="fas fa-exclamation-triangle"></i> Lọc theo độ ưu tiên
+                                </label>
+                                <select id="priority-filter" class="form-select">
+                                    <option value="">Tất cả độ ưu tiên</option>
+                                    <option value="low">Thấp</option>
+                                    <option value="medium">Trung bình</option>
+                                    <option value="high">Cao</option>
+                                    <option value="urgent">Khẩn cấp</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: right; margin-top: 1rem;">
+                            <button onclick="exportTickets()" class="btn btn-secondary">
+                                <i class="fas fa-download"></i> Xuất Excel
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Danh sách phiếu -->
+                    <div class="ticket-grid" id="ticket-grid">
+                        <!-- Không có phiếu nào -->
+                        <div class="no-tickets" style="text-align: center; padding: 3rem; color: #666;">
+                            <i class="fas fa-ticket-alt" style="font-size: 4rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+                            <h3>Chưa có phiếu nào</h3>
+                            <p>Hãy tạo phiếu mới để bắt đầu</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tạo phiếu mới Tab -->
+            <div id="new-ticket" class="tab-content">
+                <div class="card">
+                    <h1 style="margin-bottom: 2rem; color: #667eea;">
+                        <i class="fas fa-plus-circle"></i> Tạo phiếu mới
+                    </h1>
+                    
+                    <form id="new-ticket-form">
+                        <div class="grid grid-2">
+                            <div class="form-group">
+                                <label for="customer_name" class="form-label">
+                                    <i class="fas fa-user"></i> Tên khách hàng *
+                                </label>
+                                <input type="text" id="customer_name" name="customer_name" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="customer_phone" class="form-label">
+                                    <i class="fas fa-phone"></i> Số điện thoại *
+                                </label>
+                                <input type="tel" id="customer_phone" name="customer_phone" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="customer_address" class="form-label">
+                                <i class="fas fa-map-marker-alt"></i> Địa chỉ khách hàng *
+                            </label>
+                            <textarea id="customer_address" name="customer_address" class="form-control" rows="3" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="description" class="form-label">
+                                <i class="fas fa-clipboard-list"></i> Mô tả công việc *
+                            </label>
+                            <textarea id="description" name="description" class="form-control" rows="4" required 
+                                      placeholder="Mô tả chi tiết công việc cần thực hiện..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="priority" class="form-label">
+                                <i class="fas fa-exclamation-triangle"></i> Độ ưu tiên
+                            </label>
+                            <select id="priority" name="priority" class="form-select">
+                                <option value="low">Thấp</option>
+                                <option value="medium" selected>Trung bình</option>
+                                <option value="high">Cao</option>
+                                <option value="urgent">Khẩn cấp</option>
+                            </select>
+                        </div>
+                        
+                        <div style="text-align: right; margin-top: 2rem;">
+                            <button type="button" onclick="showTab('dashboard')" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Quay lại
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Tạo phiếu
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Quản lý nhân viên Tab -->
+            <div id="user-management" class="tab-content">
+                <div class="card">
+                    <h1 style="margin-bottom: 2rem; color: #667eea;">
+                        <i class="fas fa-users"></i> Quản lý nhân viên
+                    </h1>
+                    
+                    <div style="text-align: right; margin-bottom: 2rem;">
+                        <button onclick="showTab('add-employee')" class="btn btn-success" id="add-employee-btn" style="display: none;">
+                            <i class="fas fa-user-plus"></i> Thêm nhân viên mới
+                        </button>
+                    </div>
+                    
+                    <div class="user-grid" id="user-grid">
+                        <!-- Không có nhân viên nào -->
+                        <div class="no-users" style="text-align: center; padding: 3rem; color: #666;">
+                            <i class="fas fa-users" style="font-size: 4rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+                            <h3>Chưa có nhân viên nào</h3>
+                            <p>Hãy thêm nhân viên mới để bắt đầu</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Đăng nhập Tab -->
+            <div id="login" class="tab-content">
+                <div class="auth-container">
+                    <div class="auth-card">
+                        <h1 class="auth-title">
+                            <i class="fas fa-tools"></i><br>
+                            Đăng nhập
+                        </h1>
+                        
+                                                 <form id="login-form">
+                             <div class="form-group">
+                                 <label for="login_username" class="form-label">
+                                     <i class="fas fa-user"></i> Tên đăng nhập
+                                 </label>
+                                 <input type="text" id="login_username" name="username" class="form-control" required>
+                             </div>
+                             
+                             <div class="form-group">
+                                 <label for="login_password" class="form-label">
+                                     <i class="fas fa-lock"></i> Mật khẩu
+                                 </label>
+                                 <input type="password" id="login_password" name="password" class="form-control" required>
+                             </div>
+                             
+                             <div class="form-group">
+                                 <label for="login_role" class="form-label">
+                                     <i class="fas fa-user-tag"></i> Vai trò
+                                 </label>
+                                 <select id="login_role" name="role" class="form-select" required>
+                                     <option value="">Chọn vai trò</option>
+                                     <option value="technician">Kỹ thuật viên</option>
+                                     <option value="sales">Kinh doanh</option>
+                                     <option value="accountant">Kế toán</option>
+                                     <option value="manager">Quản lý</option>
+                                     <option value="admin">Quản trị viên</option>
+                                 </select>
+                             </div>
+                             
+                             <button type="submit" class="btn btn-primary" style="width: 100%;">
+                                 <i class="fas fa-sign-in-alt"></i> Đăng nhập
+                             </button>
+                         </form>
+                        
+                        <div style="text-align: center; margin-top: 2rem;">
+                            <p>Chưa có tài khoản? <a href="#" onclick="showTab('register')" style="color: #667eea; text-decoration: none;">Đăng ký ngay</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Đăng ký Tab -->
+            <div id="register" class="tab-content">
+                <div class="auth-container">
+                    <div class="auth-card">
+                        <h1 class="auth-title">
+                            <i class="fas fa-user-plus"></i><br>
+                            Đăng ký
+                        </h1>
+                        
+                        <form id="register-form">
+                            <div class="form-group">
+                                <label for="reg_username" class="form-label">
+                                    <i class="fas fa-user"></i> Tên đăng nhập
+                                </label>
+                                <input type="text" id="reg_username" name="username" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="reg_email" class="form-label">
+                                    <i class="fas fa-envelope"></i> Email
+                                </label>
+                                <input type="email" id="reg_email" name="email" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="reg_password" class="form-label">
+                                    <i class="fas fa-lock"></i> Mật khẩu
+                                </label>
+                                <input type="password" id="reg_password" name="password" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="reg_role" class="form-label">
+                                    <i class="fas fa-user-tag"></i> Vai trò
+                                </label>
+                                <select id="reg_role" name="role" class="form-select">
+                                    <option value="technician">Kỹ thuật viên</option>
+                                    <option value="sales">Kinh doanh</option>
+                                    <option value="accountant">Kế toán</option>
+                                    <option value="manager">Quản lý</option>
+                                    <option value="admin">Quản trị viên</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="reg_admin_code" class="form-label">
+                                    <i class="fas fa-key"></i> Mã quản trị
+                                </label>
+                                <input type="password" id="reg_admin_code" name="admin_code" class="form-control" required placeholder="Nhập mã quản trị để tạo tài khoản">
+                                <small class="form-text text-muted">Chỉ admin mới có thể tạo tài khoản mới</small>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">
+                                <i class="fas fa-user-plus"></i> Đăng ký
+                            </button>
+                        </form>
+                        
+                        <div style="text-align: center; margin-top: 2rem;">
+                            <p>Đã có tài khoản? <a href="#" onclick="showTab('login')" style="color: #667eea; text-decoration: none;">Đăng nhập ngay</a></p>
+                        </div>
+                                         </div>
+                 </div>
+             </div>
+             
+             <!-- Thêm nhân viên mới Tab -->
+             <div id="add-employee" class="tab-content">
+                 <div class="card">
+                     <h1 style="margin-bottom: 2rem; color: #667eea;">
+                         <i class="fas fa-user-plus"></i> Thêm nhân viên mới
+                     </h1>
+                     
+                     <form id="add-employee-form">
+                         <div class="form-group">
+                             <label for="add_username" class="form-label">
+                                 <i class="fas fa-user"></i> Tên đăng nhập
+                             </label>
+                             <input type="text" id="add_username" name="username" class="form-control" required>
+                         </div>
+                         
+                         <div class="form-group">
+                             <label for="add_email" class="form-label">
+                                 <i class="fas fa-envelope"></i> Email
+                             </label>
+                             <input type="email" id="add_email" name="email" class="form-control" required>
+                         </div>
+                         
+                         <div class="form-group">
+                             <label for="add_password" class="form-label">
+                                 <i class="fas fa-lock"></i> Mật khẩu
+                             </label>
+                             <input type="password" id="add_password" name="password" class="form-control" required>
+                         </div>
+                         
+                         <div class="form-group">
+                             <label for="add_role" class="form-label">
+                                 <i class="fas fa-user-tag"></i> Vai trò
+                             </label>
+                             <select id="add_role" name="role" class="form-select" required>
+                                 <option value="">Chọn vai trò</option>
+                                 <option value="technician">Kỹ thuật viên</option>
+                                 <option value="sales">Kinh doanh</option>
+                                 <option value="accountant">Kế toán</option>
+                                 <option value="manager">Quản lý</option>
+                                 <option value="admin">Quản trị viên</option>
+                             </select>
+                         </div>
+                         
+                         <div style="text-align: right; margin-top: 2rem;">
+                             <button type="button" onclick="showTab('user-management')" class="btn btn-secondary">
+                                 <i class="fas fa-arrow-left"></i> Quay lại
+                             </button>
+                             <button type="submit" class="btn btn-primary">
+                                 <i class="fas fa-user-plus"></i> Thêm nhân viên
+                             </button>
+                         </div>
+                     </form>
+                 </div>
+             </div>
+             
+             <!-- Thông tin người dùng Tab -->
+             <div id="user-profile" class="tab-content">
+                 <div class="card">
+                     <h1 style="margin-bottom: 2rem; color: #667eea;">
+                         <i class="fas fa-user-circle"></i> Thông tin người dùng
+                     </h1>
+                     
+                     <div class="profile-container">
+                         <div class="profile-card">
+                             <!-- Chế độ xem thông tin -->
+                             <div id="profile-view-mode">
+                                 <div class="profile-header">
+                                     <div class="profile-avatar">
+                                         <i class="fas fa-user-circle"></i>
+                                     </div>
+                                     <div class="profile-info">
+                                         <h2 id="profile-username">Tên người dùng</h2>
+                                         <p id="profile-role">Chức vụ</p>
+                                         <p id="profile-email">Email</p>
+                                     </div>
+                                 </div>
+                                 
+                                 <div class="profile-details">
+                                     <div class="detail-item">
+                                         <label><i class="fas fa-calendar"></i> Ngày tạo tài khoản:</label>
+                                         <span id="profile-created">Ngày tạo</span>
+                                     </div>
+                                 </div>
+                                 
+                                 <div class="profile-actions">
+                                     <button onclick="showTab('dashboard')" class="btn btn-secondary">
+                                         <i class="fas fa-arrow-left"></i> Quay lại Dashboard
+                                     </button>
+                                     <button onclick="enableEditMode()" class="btn btn-info" id="edit-btn">
+                                         <i class="fas fa-edit"></i> Chỉnh sửa
+                                     </button>
+                                     <button onclick="updateUserInfo()" class="btn btn-primary" id="update-btn" style="display: none;">
+                                         <i class="fas fa-save"></i> Cập nhật thông tin
+                                     </button>
+                                     <button onclick="deleteCurrentUser()" class="btn btn-danger" id="delete-btn">
+                                         <i class="fas fa-trash"></i> Xóa nhân viên
+                                     </button>
+                                 </div>
+                             </div>
+                             
+                             <!-- Chế độ chỉnh sửa -->
+                             <div id="profile-edit-mode" style="display: none;">
+                                 <div class="profile-header">
+                                     <div class="profile-avatar">
+                                         <i class="fas fa-user-circle"></i>
+                                     </div>
+                                     <div class="profile-info">
+                                         <h2>Chỉnh sửa thông tin</h2>
+                                         <p style="color: #667eea;">Cập nhật thông tin cá nhân</p>
+                                     </div>
+                                 </div>
+                                 
+                                 <form id="profile-edit-form">
+                                     <div class="form-group">
+                                         <label for="edit-username" class="form-label">
+                                             <i class="fas fa-user"></i> Tên người dùng
+                                         </label>
+                                         <input type="text" id="edit-username" class="form-control" required>
+                                     </div>
+                                     
+                                     <div class="form-group">
+                                         <label for="edit-role" class="form-label">
+                                             <i class="fas fa-user-tag"></i> Chức vụ
+                                         </label>
+                                         <select id="edit-role" class="form-select" required>
+                                             <option value="technician">Kỹ thuật</option>
+                                             <option value="sales">Kinh doanh</option>
+                                             <option value="accountant">Kế toán</option>
+                                         </select>
+                                     </div>
+                                     
+                                     <div class="form-group">
+                                         <label for="edit-email" class="form-label">
+                                             <i class="fas fa-envelope"></i> Email
+                                         </label>
+                                         <input type="email" id="edit-email" class="form-control" required>
+                                     </div>
+                                     
+                                     <div class="profile-actions">
+                                         <button type="button" onclick="cancelEdit()" class="btn btn-secondary">
+                                             <i class="fas fa-times"></i> Hủy
+                                         </button>
+                                         <button type="submit" class="btn btn-primary">
+                                             <i class="fas fa-save"></i> Cập nhật
+                                         </button>
+                                     </div>
+                                 </form>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </main>
+
+     <!-- Modals -->
+     <!-- Modal điều phiếu -->
+     <div id="assignModal" class="modal">
+         <div class="modal-content">
+             <span class="close" onclick="closeModal('assignModal')">&times;</span>
+             <h2><i class="fas fa-user-plus"></i> Điều phiếu</h2>
+             <p><strong>Khách hàng:</strong> <span id="assign-customer-name"></span></p>
+             <p><strong>Mô tả:</strong> <span id="assign-description"></span></p>
+             
+             <div class="form-group">
+                 <label for="technician-select" class="form-label">Chọn kỹ thuật viên:</label>
+                 <select id="technician-select" class="form-select">
+                     <option value="">Chọn kỹ thuật viên...</option>
+                 </select>
+                 <small class="form-text text-muted">Chỉ hiển thị kỹ thuật viên đang online</small>
+             </div>
+             
+             <div id="no-technicians" class="alert alert-warning" style="display: none;">
+                 <i class="fas fa-exclamation-triangle"></i> Không có kỹ thuật viên nào đang online. Không thể điều phiếu!
+             </div>
+             
+             <div style="text-align: right; margin-top: 2rem;">
+                 <button class="btn btn-secondary" onclick="closeModal('assignModal')">Hủy</button>
+                 <button id="assign-btn" class="btn btn-primary" onclick="assignTicket()">Điều phiếu</button>
+             </div>
+         </div>
+     </div>
+
+     <!-- Modal hoàn thành phiếu -->
+     <div id="completeModal" class="modal">
+         <div class="modal-content">
+             <span class="close" onclick="closeModal('completeModal')">&times;</span>
+             <h2><i class="fas fa-flag-checkered"></i> Hoàn thành phiếu</h2>
+             <p><strong>Khách hàng:</strong> <span id="complete-customer-name"></span></p>
+             <p><strong>Mô tả:</strong> <span id="complete-description"></span></p>
+             
+             <div class="form-group">
+                 <label for="completion-notes" class="form-label">Ghi chú hoàn thành:</label>
+                 <textarea id="completion-notes" class="form-control" rows="4" placeholder="Nhập ghi chú về công việc đã hoàn thành..."></textarea>
+             </div>
+             
+             <div style="text-align: right; margin-top: 2rem;">
+                 <button class="btn btn-secondary" onclick="closeModal('completeModal')">Hủy</button>
+                 <button class="btn btn-success" onclick="completeTicket()">Hoàn thành</button>
+             </div>
+         </div>
+     </div>
+
+     <!-- Modal cập nhật trạng thái -->
+     <div id="updateModal" class="modal">
+         <div class="modal-content">
+             <span class="close" onclick="closeModal('updateModal')">&times;</span>
+             <h2><i class="fas fa-edit"></i> Cập nhật phiếu</h2>
+             
+             <div class="form-group">
+                 <label for="status-select" class="form-label">Trạng thái:</label>
+                 <select id="status-select" class="form-select">
+                     <option value="pending">Chờ xử lý</option>
+                     <option value="assigned">Đã phân công</option>
+                     <option value="in_progress">Đang xử lý</option>
+                     <option value="completed">Hoàn thành</option>
+                     <option value="cancelled">Đã hủy</option>
+                 </select>
+             </div>
+             
+             <div class="form-group">
+                 <label for="update-notes" class="form-label">Ghi chú:</label>
+                 <textarea id="update-notes" class="form-control" rows="4" placeholder="Nhập ghi chú về công việc..."></textarea>
+             </div>
+             
+             <div style="text-align: right; margin-top: 2rem;">
+                 <button class="btn btn-secondary" onclick="closeModal('updateModal')">Hủy</button>
+                 <button class="btn btn-primary" onclick="updateTicketStatus()">Cập nhật</button>
+             </div>
+         </div>
+     </div>
+
+     <!-- Modal chỉnh sửa nhân viên -->
+     <div id="editUserModal" class="modal">
+         <div class="modal-content">
+             <span class="close" onclick="closeModal('editUserModal')">&times;</span>
+             <h2><i class="fas fa-user-edit"></i> Chỉnh sửa nhân viên</h2>
+             
+             <form id="edit-user-form">
+                 <div class="form-group">
+                     <label for="edit_user_username" class="form-label">
+                         <i class="fas fa-user"></i> Tên đăng nhập
+                     </label>
+                     <input type="text" id="edit_user_username" name="username" class="form-control" required>
+                 </div>
+                 
+                 <div class="form-group">
+                     <label for="edit_user_email" class="form-label">
+                         <i class="fas fa-envelope"></i> Email
+                     </label>
+                     <input type="email" id="edit_user_email" name="email" class="form-control" required>
+                 </div>
+                 
+                 <div class="form-group">
+                     <label for="edit_user_password" class="form-label">
+                         <i class="fas fa-lock"></i> Mật khẩu mới (để trống nếu không đổi)
+                     </label>
+                     <input type="password" id="edit_user_password" name="password" class="form-control" placeholder="Nhập mật khẩu mới hoặc để trống">
+                 </div>
+                 
+                 <div class="form-group">
+                     <label for="edit_user_role" class="form-label">
+                         <i class="fas fa-user-tag"></i> Vai trò
+                     </label>
+                     <select id="edit_user_role" name="role" class="form-select" required>
+                         <option value="">Chọn vai trò</option>
+                         <option value="technician">Kỹ thuật viên</option>
+                         <option value="sales">Kinh doanh</option>
+                         <option value="accountant">Kế toán</option>
+                         <option value="manager">Quản lý</option>
+                         <option value="admin">Quản trị viên</option>
+                     </select>
+                 </div>
+                 
+                 <div style="text-align: right; margin-top: 2rem;">
+                     <button type="button" class="btn btn-secondary" onclick="closeModal('editUserModal')">Hủy</button>
+                     <button type="submit" class="btn btn-primary">
+                         <i class="fas fa-save"></i> Cập nhật
+                     </button>
+                 </div>
+             </form>
+         </div>
+     </div>
+
+    
+
+         <script>
+         // Global data storage
+         let kỹ_thuật_viên = [];
+         let phiếu = [];
+         let người_dùng = [];
+         
+         // Mã quản trị - chỉ admin mới biết
+         const ADMIN_CODE = 'asdfg';
+         
+         // Utility functions
+         function showAlert(message, type = 'success') {
+             const alertDiv = document.createElement('div');
+             alertDiv.className = `alert alert-${type}`;
+             alertDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'exclamation-triangle'}"></i> ${message}`;
+             
+             const container = document.querySelector('.main-content') || document.body;
+             container.insertBefore(alertDiv, container.firstChild);
+             
+             setTimeout(() => {
+                 alertDiv.remove();
+             }, 5000);
+         }
+
+         function showLoading(button) {
+             const originalText = button.innerHTML;
+             button.innerHTML = '<span class="loading"></span> Đang xử lý...';
+             button.disabled = true;
+             return originalText;
+         }
+
+         function hideLoading(button, originalText) {
+             button.innerHTML = originalText;
+             button.disabled = false;
+         }
+
+                   // User management functions
+          function addUser(userData) {
+              const newUser = {
+                  id: Date.now(),
+                  username: userData.username,
+                  email: userData.email,
+                  password: userData.password, // Lưu mật khẩu để kiểm tra đăng nhập
+                  role: userData.role,
+                  createdAt: new Date().toLocaleString('vi-VN')
+              };
+             
+             người_dùng.push(newUser);
+             
+             // Nếu là kỹ thuật viên, thêm vào danh sách kỹ_thuật_viên
+             if (userData.role === 'technician') {
+                 kỹ_thuật_viên.push({
+                     id: newUser.id,
+                     username: newUser.username
+                 });
+             }
+             
+             // Lưu vào localStorage
+             saveDataToStorage();
+             
+             // Cập nhật giao diện
+             updateUserGrid();
+             
+             return newUser;
+         }
+         
+         function updateUserGrid() {
+             const userGrid = document.getElementById('user-grid');
+             
+             // Lấy vai trò của người dùng đang đăng nhập
+             const currentUserRole = localStorage.getItem('currentUserRole');
+             const isAdmin = currentUserRole === 'admin';
+             
+             if (người_dùng.length === 0) {
+                 userGrid.innerHTML = `
+                     <div class="no-users" style="text-align: center; padding: 3rem; color: #666;">
+                         <i class="fas fa-users" style="font-size: 4rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+                         <h3>Chưa có nhân viên nào</h3>
+                         <p>Hãy thêm nhân viên mới để bắt đầu</p>
+                     </div>
+                 `;
+             } else {
+                 userGrid.innerHTML = người_dùng.map(user => `
+                     <div class="user-card">
+                         <div class="user-role role-${user.role}">${getRoleDisplayName(user.role)}</div>
+                         <h3>${user.username}</h3>
+                         <p><strong>Email:</strong> ${user.email}</p>
+                         <p><strong>Ngày tạo:</strong> ${user.createdAt}</p>
+                         <div class="ticket-actions">
+                             <button class="btn btn-info" onclick="editUser('${user.id}')" ${!isAdmin ? 'disabled' : ''} style="${!isAdmin ? 'opacity: 0.5; cursor: not-allowed;' : ''}">
+                                 <i class="fas fa-edit"></i> Chỉnh sửa
+                             </button>
+                             <button class="btn btn-danger" onclick="deleteUser('${user.id}')" ${!isAdmin ? 'disabled' : ''} style="${!isAdmin ? 'opacity: 0.5; cursor: not-allowed;' : ''}">
+                                 <i class="fas fa-trash"></i> Xóa
+                             </button>
+                         </div>
+                     </div>
+                 `).join('');
+             }
+         }
+         
+         function deleteUser(userId) {
+             // Kiểm tra quyền xóa - chỉ admin mới có quyền
+             const currentUserRole = localStorage.getItem('currentUserRole');
+             
+             if (currentUserRole !== 'admin') {
+                 showAlert('Bạn không có quyền xóa nhân viên! Chỉ quản trị viên mới có quyền này.', 'error');
+                 return;
+             }
+             
+             if (!confirm('Bạn có chắc muốn xóa nhân viên này?')) {
+                 return;
+             }
+             
+             // Xóa khỏi danh sách người_dùng
+             const userIndex = người_dùng.findIndex(u => u.id == userId);
+             if (userIndex > -1) {
+                 const deletedUser = người_dùng[userIndex];
+                 người_dùng.splice(userIndex, 1);
+                 
+                 // Nếu là kỹ thuật viên, xóa khỏi danh sách kỹ_thuật_viên
+                 if (deletedUser.role === 'technician') {
+                     const techIndex = kỹ_thuật_viên.findIndex(t => t.id == userId);
+                     if (techIndex > -1) {
+                         kỹ_thuật_viên.splice(techIndex, 1);
+                     }
+                 }
+                 
+                 // Lưu vào localStorage
+                 saveDataToStorage();
+                 
+                 // Cập nhật giao diện
+                 updateUserGrid();
+                 
+                 showAlert('Đã xóa nhân viên thành công!', 'success');
+             }
+         }
+         
+         function editUser(userId) {
+             // Kiểm tra quyền chỉnh sửa - chỉ admin mới có quyền
+             const currentUserRole = localStorage.getItem('currentUserRole');
+             
+             if (currentUserRole !== 'admin') {
+                 showAlert('Bạn không có quyền chỉnh sửa thông tin nhân viên! Chỉ quản trị viên mới có quyền này.', 'error');
+                 return;
+             }
+             
+             // Tìm thông tin nhân viên cần chỉnh sửa
+             const user = người_dùng.find(u => u.id == userId);
+             if (!user) {
+                 showAlert('Không tìm thấy thông tin nhân viên!', 'error');
+                 return;
+             }
+             
+             // Lưu ID nhân viên đang chỉnh sửa
+             window.currentEditUserId = userId;
+             
+             // Điền thông tin vào form
+             document.getElementById('edit_user_username').value = user.username;
+             document.getElementById('edit_user_email').value = user.email;
+             document.getElementById('edit_user_password').value = ''; // Để trống mật khẩu
+             document.getElementById('edit_user_role').value = user.role;
+             
+             // Mở modal chỉnh sửa
+             openModal('editUserModal');
+         }
+         
+         // Data persistence functions
+         function saveDataToStorage() {
+             localStorage.setItem('kỹ_thuật_viên', JSON.stringify(kỹ_thuật_viên));
+             localStorage.setItem('người_dùng', JSON.stringify(người_dùng));
+             localStorage.setItem('phiếu', JSON.stringify(phiếu));
+         }
+         
+         function loadDataFromStorage() {
+             const storedTechnicians = localStorage.getItem('kỹ_thuật_viên');
+             const storedUsers = localStorage.getItem('người_dùng');
+             const storedTickets = localStorage.getItem('phiếu');
+             
+             if (storedTechnicians) kỹ_thuật_viên = JSON.parse(storedTechnicians);
+             if (storedUsers) người_dùng = JSON.parse(storedUsers);
+             if (storedTickets) phiếu = JSON.parse(storedTickets);
+         }
+
+         // Modal functions
+         function openModal(modalId) {
+             const modal = document.getElementById(modalId);
+             if (modal) {
+                 modal.style.display = 'block';
+                 document.body.style.overflow = 'hidden';
+             }
+         }
+
+         function openAssignModal(ticketId, customerName, description) {
+             // Set modal content
+             document.getElementById('assign-customer-name').textContent = customerName;
+             document.getElementById('assign-description').textContent = description;
+             
+             // Store current ticket ID for assignment
+             window.currentTicketId = ticketId;
+             
+             // Load technicians
+             loadTechnicians();
+             
+             // Open modal
+             openModal('assignModal');
+         }
+
+         function openCompleteModal(ticketId, customerName, description) {
+             // Set modal content
+             document.getElementById('complete-customer-name').textContent = customerName;
+             document.getElementById('completion-notes').value = ''; // Reset completion notes
+             
+             // Store current ticket ID for completion
+             window.currentTicketId = ticketId;
+             
+             // Open modal
+             openModal('completeModal');
+         }
+
+         function openUpdateModal(ticketId) {
+             // Store current ticket ID for update
+             window.currentTicketId = ticketId;
+             
+             // Open modal
+             openModal('updateModal');
+         }
+
+         function closeModal(modalId) {
+             const modal = document.getElementById(modalId);
+             if (modal) {
+                 modal.style.display = 'none';
+                 document.body.style.overflow = 'auto';
+             }
+         }
+
+         // Close modal when clicking outside
+         window.onclick = function(event) {
+             const modals = document.querySelectorAll('.modal');
+             modals.forEach(modal => {
+                 if (event.target === modal) {
+                     modal.style.display = 'none';
+                     document.body.style.overflow = 'auto';
+                 }
+             });
+         }
+
+         // Form validation
+         function validateForm(form) {
+             const requiredFields = form.querySelectorAll('[required]');
+             let isValid = true;
+             
+             requiredFields.forEach(field => {
+                 if (!field.value.trim()) {
+                     field.style.borderColor = '#dc3545';
+                     isValid = false;
+                 } else {
+                     field.style.borderColor = '#e1e5e9';
+                 }
+             });
+             
+             return isValid;
+         }
+
+         // Ticket assignment
+         async function assignTicket() {
+             const technicianSelect = document.getElementById('technician-select');
+             const technicianId = technicianSelect.value;
+             
+             if (!technicianId) {
+                 showAlert('Vui lòng chọn kỹ thuật viên!', 'error');
+                 return;
+             }
+             
+             const assignBtn = document.getElementById('assign-btn');
+             const originalText = showLoading(assignBtn);
+             
+             try {
+                 // Simulate API call
+                 await new Promise(resolve => setTimeout(resolve, 1000));
+                 
+                 showAlert('Điều phiếu thành công!', 'success');
+                 
+                 // Update ticket status
+                 const ticketId = window.currentTicketId;
+                 const ticketCard = document.querySelector(`[data-ticket-id="${ticketId}"]`);
+                 if (ticketCard) {
+                     const statusDiv = ticketCard.querySelector('.ticket-status');
+                     statusDiv.textContent = 'ĐÃ PHÂN CÔNG';
+                     statusDiv.className = 'ticket-status status-assigned';
+                     
+                     // Update actions
+                     const actionsDiv = ticketCard.querySelector('.ticket-actions');
+                     actionsDiv.innerHTML = `
+                         <button class="btn btn-success" onclick="acceptTicket('${ticketId}')">
+                             <i class="fas fa-check"></i> Nhận phiếu
+                         </button>
+                         <button class="btn btn-info" onclick="openUpdateModal('${ticketId}')">
+                             <i class="fas fa-edit"></i> Chỉnh sửa
+                         </button>
+                         <button class="btn btn-danger" onclick="deleteTicket('${ticketId}')">
+                             <i class="fas fa-trash"></i> Xóa phiếu
+                         </button>
+                     `;
+                     
+                     // Cập nhật hiển thị nút xóa và điều phiếu
+                     const currentUserRole = localStorage.getItem('currentUserRole');
+                     updateDeleteButtonsVisibility(currentUserRole);
+                 }
+                 
+                 closeModal('assignModal');
+                 updateStats();
+             } catch (error) {
+                 showAlert('Có lỗi xảy ra khi điều phiếu!', 'error');
+             } finally {
+                 hideLoading(assignBtn, originalText);
+             }
+         }
+
+         // Load technicians for assignment modal - NOW USES REAL DATA
+         async function loadTechnicians() {
+             try {
+                 // Simulate API call
+                 await new Promise(resolve => setTimeout(resolve, 500));
+                 
+                 const select = document.getElementById('technician-select');
+                 const noTechniciansDiv = document.getElementById('no-technicians');
+                 const assignBtn = document.getElementById('assign-btn');
+                 
+                 // Clear existing options
+                 select.innerHTML = '<option value="">Chọn kỹ thuật viên...</option>';
+                 
+                 if (kỹ_thuật_viên.length === 0) {
+                     // No technicians available
+                     noTechniciansDiv.style.display = 'block';
+                     assignBtn.disabled = true;
+                     assignBtn.textContent = 'Không thể điều phiếu';
+                 } else {
+                     // Add technician options from real data
+                     kỹ_thuật_viên.forEach(tech => {
+                         const option = document.createElement('option');
+                         option.value = tech.id;
+                         option.textContent = tech.username;
+                         select.appendChild(option);
+                     });
+                     
+                     noTechniciansDiv.style.display = 'none';
+                     assignBtn.disabled = false;
+                     assignBtn.textContent = 'Điều phiếu';
+                 }
+             } catch (error) {
+                 console.error('Error loading technicians:', error);
+                 showAlert('Có lỗi xảy ra khi tải danh sách kỹ thuật viên!', 'error');
+             }
+         }
+
+         // Accept ticket
+         async function acceptTicket(ticketId) {
+             if (!confirm('Bạn có chắc muốn nhận phiếu này?')) {
+                 return;
+             }
+             
+             try {
+                 // Simulate API call
+                 await new Promise(resolve => setTimeout(resolve, 1000));
+                 
+                 showAlert('Đã nhận phiếu thành công!', 'success');
+                 
+                 // Update ticket status
+                 const ticketCard = document.querySelector(`[data-ticket-id="${ticketId}"]`);
+                 if (ticketCard) {
+                     const statusDiv = ticketCard.querySelector('.ticket-status');
+                     statusDiv.textContent = 'ĐANG XỬ LÝ';
+                     statusDiv.className = 'ticket-status status-in_progress';
+                     
+                     // Update actions
+                     const actionsDiv = ticketCard.querySelector('.ticket-actions');
+                     actionsDiv.innerHTML = `
+                         <button class="btn btn-warning" onclick="openCompleteModal('${ticketId}', '${ticketCard.querySelector('.ticket-info h3').textContent}', '${ticketCard.querySelector('.ticket-info p:nth-child(4)').textContent.replace('Mô tả: ', '')}')">
+                             <i class="fas fa-flag-checkered"></i> Hoàn thành
+                         </button>
+                         <button class="btn btn-info" onclick="openUpdateModal('${ticketId}')">
+                             <i class="fas fa-edit"></i> Chỉnh sửa
+                         </button>
+                         <button class="btn btn-danger" onclick="deleteTicket('${ticketId}')">
+                             <i class="fas fa-trash"></i> Xóa phiếu
+                         </button>
+                     `;
+                     
+                     // Cập nhật hiển thị nút xóa và điều phiếu
+                     const currentUserRole = localStorage.getItem('currentUserRole');
+                     updateDeleteButtonsVisibility(currentUserRole);
+                 }
+             } catch (error) {
+                 showAlert('Có lỗi xảy ra khi nhận phiếu!', 'error');
+             }
+         }
+
+         // Complete ticket
+         async function completeTicket() {
+             const notes = document.getElementById('completion-notes').value;
+             
+             if (!notes.trim()) {
+                 showAlert('Vui lòng nhập ghi chú hoàn thành!', 'error');
+                 return;
+             }
+             
+             try {
+                 // Simulate API call
+                 await new Promise(resolve => setTimeout(resolve, 1000));
+                 
+                 showAlert('Hoàn thành phiếu thành công!', 'success');
+                 
+                 // Update ticket status
+                 const ticketId = window.currentTicketId;
+                 const ticketCard = document.querySelector(`[data-ticket-id="${ticketId}"]`);
+                 if (ticketCard) {
+                     const statusDiv = ticketCard.querySelector('.ticket-status');
+                     statusDiv.textContent = 'HOÀN THÀNH';
+                     statusDiv.className = 'ticket-status status-completed';
+                     
+                     // Update actions
+                     const actionsDiv = ticketCard.querySelector('.ticket-actions');
+                     actionsDiv.innerHTML = `
+                         <button class="btn btn-info" onclick="openUpdateModal('${ticketId}')">
+                             <i class="fas fa-edit"></i> Chỉnh sửa
+                         </button>
+                         <button class="btn btn-danger" onclick="deleteTicket('${ticketId}')">
+                             <i class="fas fa-trash"></i> Xóa phiếu
+                         </button>
+                     `;
+                     
+                     // Add completion notes
+                     const infoDiv = ticketCard.querySelector('.ticket-info');
+                     const notesP = document.createElement('p');
+                     notesP.innerHTML = `<strong>Ghi chú hoàn thành:</strong> ${notes}`;
+                     infoDiv.appendChild(notesP);
+                     
+                     // Cập nhật hiển thị nút xóa và điều phiếu
+                     const currentUserRole = localStorage.getItem('currentUserRole');
+                     updateDeleteButtonsVisibility(currentUserRole);
+                 }
+                 
+                 closeModal('completeModal');
+                 updateStats();
+             } catch (error) {
+                 showAlert('Có lỗi xảy ra khi hoàn thành phiếu!', 'error');
+             }
+         }
+
+         // Delete ticket
+         async function deleteTicket(ticketId) {
+             // Kiểm tra quyền xóa phiếu
+             const currentUserRole = localStorage.getItem('currentUserRole');
+             if (currentUserRole !== 'admin' && currentUserRole !== 'sales') {
+                 showAlert('Bạn không có quyền xóa phiếu! Chỉ quản trị viên và kinh doanh mới có thể xóa phiếu.', 'error');
+                 return;
+             }
+             
+             if (!confirm('Bạn có chắc muốn xóa phiếu này? Hành động này không thể hoàn tác!')) {
+                 return;
+             }
+             
+             try {
+                 // Simulate API call
+                 await new Promise(resolve => setTimeout(resolve, 1000));
+                 
+                 showAlert('Đã xóa phiếu thành công!', 'success');
+                 
+                 // Remove ticket card
+                 const ticketCard = document.querySelector(`[data-ticket-id="${ticketId}"]`);
+                 if (ticketCard) {
+                     ticketCard.remove();
+                     
+                     // Update stats
+                     updateStats();
+                     
+                     // Kiểm tra nếu không còn phiếu nào thì hiển thị thông báo
+                     const remainingTickets = document.querySelectorAll('.ticket-card');
+                     if (remainingTickets.length === 0) {
+                         const ticketGrid = document.getElementById('ticket-grid');
+                         const noTickets = document.querySelector('.no-tickets');
+                         if (noTickets) {
+                             noTickets.style.display = 'block';
+                         }
+                     }
+                 }
+             } catch (error) {
+                 showAlert('Có lỗi xảy ra khi xóa phiếu!', 'error');
+             }
+         }
+
+         // Update ticket status
+         async function updateTicketStatus() {
+             const statusSelect = document.getElementById('status-select');
+             const notesTextarea = document.getElementById('update-notes');
+             
+             const status = statusSelect.value;
+             const notes = notesTextarea ? notesTextarea.value : '';
+             
+             if (!status) {
+                 showAlert('Vui lòng chọn trạng thái!', 'error');
+                 return;
+             }
+             
+             try {
+                 // Simulate API call
+                 await new Promise(resolve => setTimeout(resolve, 1000));
+                 
+                 showAlert('Cập nhật trạng thái thành công!', 'success');
+                 
+                 // Update ticket status
+                 const ticketId = window.currentTicketId;
+                 const ticketCard = document.querySelector(`[data-ticket-id="${ticketId}"]`);
+                 if (ticketCard) {
+                     const statusDiv = ticketCard.querySelector('.ticket-status');
+                     const statusText = {
+                         'pending': 'CHỜ XỬ LÝ',
+                         'unassigned': 'CHƯA ĐIỀU PHIẾU',
+                         'assigned': 'ĐÃ PHÂN CÔNG',
+                         'in_progress': 'ĐANG XỬ LÝ',
+                         'completed': 'HOÀN THÀNH',
+                         'cancelled': 'ĐÃ HỦY'
+                     };
+                     
+                     statusDiv.textContent = statusText[status];
+                     statusDiv.className = `ticket-status status-${status}`;
+                     
+                     if (notes) {
+                         const infoDiv = ticketCard.querySelector('.ticket-info');
+                         const notesP = document.createElement('p');
+                         notesP.innerHTML = `<strong>Ghi chú:</strong> ${notes}`;
+                         notesP.style.marginTop = '0.5rem';
+                         infoDiv.appendChild(notesP);
+                     }
+                     
+                     // Cập nhật hiển thị nút xóa và điều phiếu
+                     const currentUserRole = localStorage.getItem('currentUserRole');
+                     updateDeleteButtonsVisibility(currentUserRole);
+                 }
+                 
+                 closeModal('updateModal');
+                 updateStats();
+             } catch (error) {
+                 showAlert('Có lỗi xảy ra khi cập nhật trạng thái!', 'error');
+             }
+         }
+
+         // Update dashboard stats
+         function updateStats() {
+             const phiếu = document.querySelectorAll('.ticket-card');
+             const totalTickets = phiếu.length;
+             const unassignedTickets = Array.from(phiếu).filter(ticket => 
+                 ticket.querySelector('.ticket-status').textContent.includes('CHƯA ĐIỀU PHIẾU')
+             ).length;
+             const inProgressTickets = Array.from(phiếu).filter(ticket => 
+                 ticket.querySelector('.ticket-status').textContent.includes('ĐANG XỬ LÝ')
+             ).length;
+             const completedTickets = Array.from(phiếu).filter(ticket => 
+                 ticket.querySelector('.ticket-status').textContent.includes('HOÀN THÀNH')
+             ).length;
+             
+             document.querySelector('.stat-card:nth-child(1) .stat-number').textContent = totalTickets;
+             document.querySelector('.stat-card:nth-child(2) .stat-number').textContent = unassignedTickets;
+             document.querySelector('.stat-card:nth-child(3) .stat-number').textContent = inProgressTickets;
+             document.querySelector('.stat-card:nth-child(4) .stat-number').textContent = completedTickets;
+         }
+
+         // Search and filter functionality
+         function filterTickets() {
+             const searchTerm = document.getElementById('search-input').value.toLowerCase();
+             const statusFilter = document.getElementById('status-filter').value;
+             const priorityFilter = document.getElementById('priority-filter').value;
+             
+             const phiếu = document.querySelectorAll('.ticket-card');
+             
+             phiếu.forEach(ticket => {
+                 const ticketNumber = ticket.querySelector('.ticket-number').textContent.toLowerCase();
+                 const customerName = ticket.querySelector('.ticket-info h3').textContent.toLowerCase();
+                 const status = ticket.querySelector('.ticket-status').textContent.toLowerCase();
+                 const priority = ticket.querySelector('.ticket-priority').textContent.toLowerCase();
+                 
+                 let showTicket = true;
+                 
+                 // Search filter
+                 if (searchTerm && !ticketNumber.includes(searchTerm) && !customerName.includes(searchTerm)) {
+                     showTicket = false;
+                 }
+                 
+                 // Status filter
+                 if (statusFilter && !status.includes(statusFilter.toLowerCase())) {
+                     showTicket = false;
+                 }
+                 
+                 // Priority filter
+                 if (priorityFilter && !priority.includes(priorityFilter.toLowerCase())) {
+                     showTicket = false;
+                 }
+                 
+                 ticket.style.display = showTicket ? 'block' : 'none';
+             });
+         }
+
+         // Export functionality
+         function exportTickets() {
+             const phiếu = document.querySelectorAll('.ticket-card');
+             let csvContent = 'data:text/csv;charset=utf-8,';
+             csvContent += 'Số phiếu,Tên khách hàng,Địa chỉ,Số điện thoại,Mô tả,Độ ưu tiên,Trạng thái,Ngày tạo\n';
+             
+             phiếu.forEach(ticket => {
+                 const ticketNumber = ticket.querySelector('.ticket-number').textContent;
+                 const customerName = ticket.querySelector('.ticket-info h3').textContent;
+                 const customerAddress = ticket.querySelector('.ticket-info p:nth-child(2)').textContent.replace('Địa chỉ: ', '');
+                 const customerPhone = ticket.querySelector('.ticket-info p:nth-child(3)').textContent.replace('SĐT: ', '');
+                 const description = ticket.querySelector('.ticket-info p:nth-child(4)').textContent.replace('Mô tả: ', '');
+                 const priority = ticket.querySelector('.ticket-priority').textContent;
+                 const status = ticket.querySelector('.ticket-status').textContent;
+                 const createdAt = ticket.querySelector('.ticket-info p:nth-child(5)').textContent.replace('Ngày tạo: ', '');
+                 
+                 csvContent += `"${ticketNumber}","${customerName}","${customerAddress}","${customerPhone}","${description}","${priority}","${status}","${createdAt}"\n`;
+             });
+             
+             const encodedUri = encodeURI(csvContent);
+             const link = document.createElement('a');
+             document.body.appendChild(link);
+             link.setAttribute('href', encodedUri);
+             link.setAttribute('download', `phiếu_${new Date().toISOString().split('T')[0]}.csv`);
+             link.click();
+             document.body.removeChild(link);
+             
+             showAlert('Xuất Excel thành công!', 'success');
+         }
+
+         // Tab functionality
+         function showTab(tabName) {
+             // Hide all tab contents
+             const tabContents = document.querySelectorAll('.tab-content');
+             tabContents.forEach(content => {
+                 content.classList.remove('active');
+             });
+             
+             // Remove active class from all nav menu items
+             const navItems = document.querySelectorAll('.nav-menu a');
+             navItems.forEach(item => {
+                 item.classList.remove('active');
+             });
+             
+             // Show selected tab content
+             document.getElementById(tabName).classList.add('active');
+             
+             // Add active class to clicked nav item
+             event.target.classList.add('active');
+             
+             // Nếu chuyển đến tab profile, cập nhật thông tin
+             if (tabName === 'user-profile') {
+                 updateUserProfile();
+             }
+         }
+
+         // Form submissions
+         document.getElementById('new-ticket-form').addEventListener('submit', function(e) {
+             e.preventDefault();
+             
+             if (!validateForm(this)) {
+                 showAlert('Vui lòng điền đầy đủ thông tin bắt buộc!', 'error');
+                 return;
+             }
+             
+             // Simulate form submission
+             const formData = new FormData(this);
+             const ticketData = {
+                 customer_name: formData.get('customer_name'),
+                 customer_phone: formData.get('customer_phone'),
+                 customer_address: formData.get('customer_address'),
+                 description: formData.get('description'),
+                 priority: formData.get('priority')
+             };
+             
+             // Create new ticket card
+             const ticketId = Date.now();
+             const newTicket = createTicketCard(ticketId, ticketData);
+             
+             // Add to dashboard
+             const ticketGrid = document.querySelector('.ticket-grid');
+             ticketGrid.insertBefore(newTicket, ticketGrid.firstChild);
+             
+             // Ẩn thông báo "không có phiếu nào"
+             const noTickets = document.querySelector('.no-tickets');
+             if (noTickets) {
+                 noTickets.style.display = 'none';
+             }
+             
+             // Reset form and show success message
+             this.reset();
+             showAlert('Phiếu đã được tạo thành công!', 'success');
+             showTab('dashboard');
+             
+             // Update stats
+             updateStats();
+             
+             // Cập nhật hiển thị nút xóa và điều phiếu
+             const currentUserRole = localStorage.getItem('currentUserRole');
+             if (currentUserRole) {
+                 updateDeleteButtonsVisibility(currentUserRole);
+             }
+         });
+
+         // Create ticket card function
+         function createTicketCard(ticketId, data) {
+             const ticketCard = document.createElement('div');
+             ticketCard.className = 'ticket-card';
+             ticketCard.setAttribute('data-ticket-id', ticketId);
+             
+             const priorityClass = `priority-${data.priority}`;
+             const priorityText = {
+                 'low': 'THẤP',
+                 'medium': 'TRUNG BÌNH',
+                 'high': 'CAO',
+                 'urgent': 'KHẨN CẤP'
+             };
+             
+             ticketCard.innerHTML = `
+                 <div class="ticket-header">
+                     <div class="ticket-number">TK${new Date().toISOString().slice(0,10).replace(/-/g,'')}${ticketId}</div>
+                     <div class="ticket-priority ${priorityClass}">${priorityText[data.priority]}</div>
+                 </div>
+                 
+                 <div class="ticket-status status-unassigned">CHƯA ĐIỀU PHIẾU</div>
+                 
+                 <div class="ticket-info">
+                     <h3>${data.customer_name}</h3>
+                     <p><strong>Địa chỉ:</strong> ${data.customer_address}</p>
+                     <p><strong>SĐT:</strong> ${data.customer_phone}</p>
+                     <p><strong>Mô tả:</strong> ${data.description}</p>
+                     <p><strong>Ngày tạo:</strong> ${new Date().toLocaleString('vi-VN')}</p>
+                 </div>
+                 
+                 <div class="ticket-actions">
+                      <button class="btn btn-primary assign-btn" onclick="openAssignModal('${ticketId}', '${data.customer_name}', '${data.description}')" style="display: none;">
+                          <i class="fas fa-user-plus"></i> Điều phiếu
+                      </button>
+                      <button class="btn btn-info">
+                          <i class="fas fa-edit"></i> Chỉnh sửa
+                      </button>
+                      <button class="btn btn-danger" onclick="deleteTicket('${ticketId}')">
+                          <i class="fas fa-trash"></i> Xóa phiếu
+                      </button>
+                  </div>
+             `;
+             
+             return ticketCard;
+         }
+
+                   document.getElementById('login-form').addEventListener('submit', function(e) {
+               e.preventDefault();
+               
+               if (!validateForm(this)) {
+                   showAlert('Vui lòng điền đầy đủ thông tin!', 'error');
+                   return;
+               }
+               
+              // Lấy thông tin đăng nhập
+              const username = document.getElementById('login_username').value;
+              const password = document.getElementById('login_password').value;
+              const role = document.getElementById('login_role').value;
+              
+              // Kiểm tra tài khoản có tồn tại trong hệ thống không
+              const existingUser = người_dùng.find(user => 
+                  user.username === username && 
+                  user.password === password &&
+                  user.role === role
+              );
+              
+              if (!existingUser) {
+                  showAlert('Tài khoản không tồn tại hoặc thông tin đăng nhập sai! Vui lòng kiểm tra lại hoặc đăng ký tài khoản mới.', 'error');
+                  return;
+              }
+              
+              // Đăng nhập thành công
+              localStorage.setItem('isLoggedIn', 'true');
+              localStorage.setItem('currentUser', username);
+              localStorage.setItem('currentUserRole', role);
+              
+              // Cập nhật giao diện
+              updateMenuAfterLogin(username, role);
+              
+              showAlert('Đăng nhập thành công!', 'success');
+              showTab('dashboard');
+              
+              // Reset form
+              this.reset();
+              
+              // Xóa thông báo lỗi validation
+              const errorFields = this.querySelectorAll('.form-control');
+              errorFields.forEach(field => {
+                  field.style.borderColor = '#e1e5e9';
+              });
+          });
+
+         document.getElementById('register-form').addEventListener('submit', function(e) {
+             e.preventDefault();
+             
+             if (!validateForm(this)) {
+                 showAlert('Vui lòng điền đầy đủ thông tin!', 'error');
+                 return;
+             }
+             
+             // Lấy thông tin đăng ký
+             const formData = new FormData(this);
+             const adminCode = formData.get('admin_code');
+             
+             // Kiểm tra mã quản trị
+             if (adminCode !== ADMIN_CODE) {
+                 showAlert('Mã quản trị không đúng! Vui lòng kiểm tra lại.', 'error');
+                 return;
+             }
+             
+             const userData = {
+                 username: formData.get('username'),
+                 email: formData.get('email'),
+                 password: formData.get('password'),
+                 role: formData.get('role')
+             };
+             
+             // Thêm nhân viên mới vào hệ thống
+             const newUser = addUser(userData);
+             
+             showAlert(`Đăng ký thành công! Đã thêm ${getRoleDisplayName(userData.role)}: ${userData.username}`, 'success');
+             
+             // Reset form
+             this.reset();
+             
+             // Chuyển về tab đăng nhập
+             showTab('login');
+         });
+
+         // Login/Logout functions
+         function updateMenuAfterLogin(username, role) {
+             // Ẩn menu đăng nhập/đăng ký
+             document.getElementById('auth-menu').style.display = 'none';
+             
+             // Hiển thị menu người dùng
+             document.getElementById('user-menu').style.display = 'flex';
+             
+             // Cập nhật tên người dùng và vai trò
+             const currentUsernameElement = document.getElementById('current-username');
+             if (currentUsernameElement) {
+                 currentUsernameElement.textContent = `${username} (${getRoleDisplayName(role)})`;
+             }
+             
+             // Highlight menu Trang chủ
+             const dashboardLink = document.querySelector('.nav-menu a[onclick*="dashboard"]');
+             if (dashboardLink) {
+                 dashboardLink.classList.add('active');
+             }
+             
+             // Cập nhật hiển thị nút xóa phiếu dựa trên vai trò
+             updateDeleteButtonsVisibility(role);
+             
+             // Cập nhật giao diện quản lý nhân viên để cập nhật trạng thái nút chỉnh sửa
+             updateUserGrid();
+             
+             // Cập nhật hiển thị nút thêm nhân viên mới - chỉ admin mới thấy
+             const addEmployeeBtn = document.getElementById('add-employee-btn');
+             if (addEmployeeBtn) {
+                 if (role === 'admin') {
+                     addEmployeeBtn.style.display = 'inline-block';
+                     addEmployeeBtn.disabled = false;
+                     addEmployeeBtn.style.opacity = '1';
+                     addEmployeeBtn.style.cursor = 'pointer';
+                     addEmployeeBtn.title = 'Thêm nhân viên mới';
+                 } else {
+                     addEmployeeBtn.style.display = 'none';
+                 }
+             }
+             
+             // Cập nhật thông tin profile
+             updateUserProfile();
+         }
+         
+         function updateMenuAfterLogout() {
+             // Hiển thị menu đăng nhập/đăng ký
+             document.getElementById('auth-menu').style.display = 'flex';
+             
+             // Ẩn menu người dùng
+             document.getElementById('user-menu').style.display = 'none';
+             
+             // Xóa thông tin đăng nhập
+             localStorage.removeItem('isLoggedIn');
+             localStorage.removeItem('currentUser');
+             localStorage.removeItem('currentUserRole');
+             
+             // Ẩn nút thêm nhân viên mới khi đăng xuất
+             const addEmployeeBtn = document.getElementById('add-employee-btn');
+             if (addEmployeeBtn) {
+                 addEmployeeBtn.style.display = 'none';
+             }
+             
+             // Chuyển về tab đăng nhập
+             showTab('login');
+         }
+         
+         function logout() {
+             if (confirm('Bạn có chắc muốn đăng xuất?')) {
+                 updateMenuAfterLogout();
+                 showAlert('Đã đăng xuất thành công!', 'success');
+             }
+         }
+         
+         // Helper functions
+         function getRoleDisplayName(role) {
+             const roleNames = {
+                 'admin': 'Quản trị viên',
+                 'manager': 'Quản lý',
+                 'sales': 'Kinh doanh',
+                 'accountant': 'Kế toán',
+                 'technician': 'Kỹ thuật viên'
+             };
+             return roleNames[role] || role;
+         }
+         
+         function updateDeleteButtonsVisibility(role) {
+             const deleteButtons = document.querySelectorAll('.btn-danger');
+             const assignButtons = document.querySelectorAll('.assign-btn');
+             
+             // Cập nhật nút xóa phiếu
+             deleteButtons.forEach(button => {
+                 if (role === 'admin' || role === 'sales') {
+                     // Quản trị viên và Kinh doanh: nút xóa hoạt động bình thường
+                     button.style.display = 'inline-block';
+                     button.disabled = false;
+                     button.style.opacity = '1';
+                     button.style.cursor = 'pointer';
+                     button.title = role === 'admin' ? 'Xóa phiếu' : 'Xóa phiếu (Kinh doanh)';
+                 } else {
+                     // Không phải admin hoặc sales: nút xóa bị disable nhưng vẫn hiển thị
+                     button.style.display = 'inline-block';
+                     button.disabled = true;
+                     button.style.opacity = '0.5';
+                     button.style.cursor = 'not-allowed';
+                     button.title = 'Chỉ quản trị viên và kinh doanh mới có thể xóa phiếu';
+                 }
+             });
+             
+             // Cập nhật nút điều phiếu
+             assignButtons.forEach(button => {
+                 if (role === 'admin') {
+                     // Chỉ quản trị viên mới thấy nút điều phiếu
+                     button.style.display = 'inline-block';
+                     button.disabled = false;
+                     button.style.opacity = '1';
+                     button.style.cursor = 'pointer';
+                     button.title = 'Điều phiếu cho kỹ thuật viên';
+                 } else {
+                     // Ẩn nút điều phiếu với các vai trò khác
+                     button.style.display = 'none';
+                 }
+             });
+         }
+         
+         // Update user profile information
+         function updateUserProfile() {
+             const currentUser = localStorage.getItem('currentUser');
+             const currentUserRole = localStorage.getItem('currentUserRole');
+             
+             if (currentUser && currentUserRole) {
+                 // Tìm thông tin người dùng trong danh sách
+                 const user = người_dùng.find(u => u.username === currentUser);
+                 
+                 if (user) {
+                     // Cập nhật thông tin hiển thị
+                     document.getElementById('profile-username').textContent = user.username;
+                     document.getElementById('profile-role').textContent = getRoleDisplayName(user.role);
+                     document.getElementById('profile-email').textContent = user.email;
+                     document.getElementById('profile-created').textContent = user.createdAt;
+                     
+                     // Cập nhật form chỉnh sửa
+                     document.getElementById('edit-username').value = user.username;
+                     document.getElementById('edit-role').value = user.role;
+                     document.getElementById('edit-email').value = user.email;
+                 }
+             }
+         }
+         
+         // Enable edit mode
+         function enableEditMode() {
+             const currentUser = localStorage.getItem('currentUser');
+             const currentUserRole = localStorage.getItem('currentUserRole');
+             
+             // Chỉ admin mới có thể chỉnh sửa
+             if (currentUserRole !== 'admin') {
+                 showAlert('Bạn không có quyền chỉnh sửa thông tin nhân viên! Chỉ quản trị viên mới có quyền này.', 'error');
+                 return;
+             }
+             
+             // Chuyển sang chế độ chỉnh sửa
+             document.getElementById('profile-view-mode').style.display = 'none';
+             document.getElementById('profile-edit-mode').style.display = 'block';
+             
+             // Cập nhật thông tin form
+             updateUserProfile();
+         }
+         
+         // Cancel edit mode
+         function cancelEdit() {
+             document.getElementById('profile-view-mode').style.display = 'block';
+             document.getElementById('profile-edit-mode').style.display = 'none';
+         }
+         
+         // Update user information
+         function updateUserInfo() {
+             const username = document.getElementById('edit-username').value.trim();
+             const role = document.getElementById('edit-role').value;
+             const email = document.getElementById('edit-email').value.trim();
+             
+             if (!username || !role || !email) {
+                 showAlert('Vui lòng điền đầy đủ thông tin!', 'error');
+                 return;
+             }
+             
+             const currentUser = localStorage.getItem('currentUser');
+             const userIndex = người_dùng.findIndex(u => u.username === currentUser);
+             
+             if (userIndex > -1) {
+                 const oldRole = người_dùng[userIndex].role;
+                 
+                 // Cập nhật thông tin người dùng
+                 người_dùng[userIndex].username = username;
+                 người_dùng[userIndex].role = role;
+                 người_dùng[userIndex].email = email;
+                 
+                 // Cập nhật localStorage
+                 localStorage.setItem('currentUser', username);
+                 localStorage.setItem('currentUserRole', role);
+                 
+                 // Cập nhật danh sách kỹ thuật viên nếu cần
+                 if (oldRole === 'technician' && role !== 'technician') {
+                     // Xóa khỏi danh sách kỹ thuật viên
+                     const techIndex = kỹ_thuật_viên.findIndex(t => t.username === currentUser);
+                     if (techIndex > -1) {
+                         kỹ_thuật_viên.splice(techIndex, 1);
+                     }
+                 } else if (oldRole !== 'technician' && role === 'technician') {
+                     // Thêm vào danh sách kỹ thuật viên
+                     kỹ_thuật_viên.push({
+                         id: người_dùng[userIndex].id,
+                         username: username
+                     });
+                 } else if (role === 'technician') {
+                     // Cập nhật tên trong danh sách kỹ thuật viên
+                     const techIndex = kỹ_thuật_viên.findIndex(t => t.username === currentUser);
+                     if (techIndex > -1) {
+                         kỹ_thuật_viên[techIndex].username = username;
+                     }
+                 }
+                 
+                 // Lưu vào localStorage
+                 saveDataToStorage();
+                 
+                 // Cập nhật giao diện
+                 updateUserProfile();
+                 updateUserGrid();
+                 
+                 // Quay về chế độ xem
+                 cancelEdit();
+                 
+                 showAlert('Cập nhật thông tin thành công!', 'success');
+             }
+         }
+         
+         // Delete current user
+         function deleteCurrentUser() {
+             const currentUser = localStorage.getItem('currentUser');
+             const currentUserRole = localStorage.getItem('currentUserRole');
+             
+             // Chỉ admin mới có thể xóa
+             if (currentUserRole !== 'admin') {
+                 showAlert('Bạn không có quyền xóa nhân viên! Chỉ quản trị viên mới có quyền này.', 'error');
+                 return;
+             }
+             
+             if (!confirm(`Bạn có chắc muốn xóa nhân viên "${currentUser}"? Hành động này không thể hoàn tác!`)) {
+                 return;
+             }
+             
+             // Xóa khỏi danh sách người dùng
+             const userIndex = người_dùng.findIndex(u => u.username === currentUser);
+             if (userIndex > -1) {
+                 const deletedUser = người_dùng[userIndex];
+                 người_dùng.splice(userIndex, 1);
+                 
+                 // Xóa khỏi danh sách kỹ thuật viên nếu cần
+                 if (deletedUser.role === 'technician') {
+                     const techIndex = kỹ_thuật_viên.findIndex(t => t.username === currentUser);
+                     if (techIndex > -1) {
+                         kỹ_thuật_viên.splice(techIndex, 1);
+                     }
+                 }
+                 
+                 // Lưu vào localStorage
+                 saveDataToStorage();
+                 
+                 // Cập nhật giao diện
+                 updateUserGrid();
+                 
+                 // Đăng xuất và chuyển về dashboard
+                 showAlert('Đã xóa nhân viên thành công!', 'success');
+                 logout();
+             }
+         }
+         
+         // Check login status on page load
+         function checkLoginStatus() {
+             const isLoggedIn = localStorage.getItem('isLoggedIn');
+             const currentUser = localStorage.getItem('currentUser');
+             const currentUserRole = localStorage.getItem('currentUserRole');
+             
+             if (isLoggedIn === 'true' && currentUser && currentUserRole) {
+                 updateMenuAfterLogin(currentUser, currentUserRole);
+             } else {
+                 // Nếu chưa đăng nhập, cập nhật hiển thị nút xóa cho tất cả phiếu
+                 updateDeleteButtonsVisibility('guest');
+                 // Cập nhật giao diện quản lý nhân viên cho khách
+                 updateUserGrid();
+                 
+                 // Ẩn nút thêm nhân viên mới khi chưa đăng nhập
+                 const addEmployeeBtn = document.getElementById('add-employee-btn');
+                 if (addEmployeeBtn) {
+                     addEmployeeBtn.style.display = 'none';
+                 }
+             }
+         }
+         
+                   // Initialize event listeners
+          document.addEventListener('DOMContentLoaded', function() {
+             // Load data from localStorage
+             loadDataFromStorage();
+             
+             // Thêm một số tài khoản mẫu nếu chưa có
+             if (người_dùng.length === 0) {
+                 const sampleUsers = [
+                     {
+                         id: 1,
+                         username: 'admin',
+                         email: 'admin@example.com',
+                         password: 'admin123',
+                         role: 'admin',
+                         createdAt: new Date().toLocaleString('vi-VN')
+                     },
+                     {
+                         id: 2,
+                         username: 'technician1',
+                         email: 'tech1@example.com',
+                         password: 'tech123',
+                         role: 'technician',
+                         createdAt: new Date().toLocaleString('vi-VN')
+                     },
+                     {
+                         id: 3,
+                         username: 'user1',
+                         email: 'user1@example.com',
+                         password: 'user123',
+                         role: 'sales',
+                         createdAt: new Date().toLocaleString('vi-VN')
+                     },
+                     {
+                         id: 4,
+                         username: 'accountant1',
+                         email: 'acc1@example.com',
+                         password: 'acc123',
+                         role: 'accountant',
+                         createdAt: new Date().toLocaleString('vi-VN')
+                     }
+                 ];
+                 
+                 sampleUsers.forEach(user => {
+                     người_dùng.push(user);
+                     if (user.role === 'technician') {
+                         kỹ_thuật_viên.push({
+                             id: user.id,
+                             username: user.username
+                         });
+                     }
+                 });
+                 
+                 // Lưu vào localStorage
+                 saveDataToStorage();
+             }
+             
+             // Update user grid with loaded data
+             updateUserGrid();
+             
+             // Setup search and filter
+             const searchInput = document.getElementById('search-input');
+             const statusFilter = document.getElementById('status-filter');
+             const priorityFilter = document.getElementById('priority-filter');
+             
+             if (searchInput) {
+                 searchInput.addEventListener('input', filterTickets);
+             }
+             
+             if (statusFilter) {
+                 statusFilter.addEventListener('change', filterTickets);
+             }
+             
+             if (priorityFilter) {
+                 priorityFilter.addEventListener('change', filterTickets);
+             }
+             
+             // Form validation đã được xử lý riêng cho từng form
+             
+             // Auto-format phone number
+             const phoneInput = document.getElementById('customer_phone');
+             if (phoneInput) {
+                 phoneInput.addEventListener('input', function(e) {
+                     let value = e.target.value.replace(/\D/g, '');
+                     if (value.length > 0) {
+                         if (value.length <= 3) {
+                             value = value;
+                         } else if (value.length <= 6) {
+                             value = value.slice(0, 3) + ' ' + value.slice(3);
+                         } else if (value.length <= 10) {
+                             value = value.slice(0, 3) + ' ' + value.slice(3, 6) + ' ' + value.slice(6);
+                         } else {
+                             value = value.slice(0, 3) + ' ' + value.slice(3, 6) + ' ' + value.slice(6, 8) + ' ' + value.slice(8, 10);
+                         }
+                     }
+                     e.target.value = value;
+                 });
+             }
+             
+             // Validation cho tên khách hàng - chỉ cho phép chữ cái, dấu cách và ký tự đặc biệt cần thiết
+             const customerNameInput = document.getElementById('customer_name');
+             if (customerNameInput) {
+                 customerNameInput.addEventListener('input', function(e) {
+                     // Chỉ cho phép chữ cái, dấu cách, dấu gạch ngang, dấu chấm và dấu phẩy
+                     let value = e.target.value.replace(/[^a-zA-ZÀ-ỹ\s\-.,]/g, '');
+                     
+                     // Loại bỏ khoảng trắng thừa
+                     value = value.replace(/\s+/g, ' ').trim();
+                     
+                     // Giới hạn độ dài tối đa
+                     if (value.length > 50) {
+                         value = value.substring(0, 50);
+                     }
+                     
+                     e.target.value = value;
+                 });
+                 
+                 // Thêm placeholder để hướng dẫn người dùng
+                 customerNameInput.placeholder = 'Ví dụ: Nguyễn Văn A';
+             }
+             
+             // Add data-ticket-id to existing tickets
+             const phiếu = document.querySelectorAll('.ticket-card');
+             phiếu.forEach((ticket, index) => {
+                 ticket.setAttribute('data-ticket-id', `demo-${index + 1}`);
+             });
+             
+             // Set active state for dashboard menu item on page load
+             const dashboardLink = document.querySelector('.nav-menu a[onclick*="dashboard"]');
+             if (dashboardLink) {
+                 dashboardLink.classList.add('active');
+             }
+             
+             // Check login status
+             checkLoginStatus();
+             
+             // Setup add employee form
+             const addEmployeeForm = document.getElementById('add-employee-form');
+             if (addEmployeeForm) {
+                 addEmployeeForm.addEventListener('submit', function(e) {
+                     e.preventDefault();
+                     
+                     if (!validateForm(this)) {
+                         showAlert('Vui lòng điền đầy đủ thông tin bắt buộc!', 'error');
+                         return;
+                     }
+                     
+                     // Lấy thông tin nhân viên mới
+                     const formData = new FormData(this);
+                     const userData = {
+                         username: formData.get('username'),
+                         email: formData.get('email'),
+                         password: formData.get('password'),
+                         role: formData.get('role')
+                     };
+                     
+                     // Kiểm tra tên đăng nhập đã tồn tại chưa
+                     const existingUser = người_dùng.find(user => user.username === userData.username);
+                     if (existingUser) {
+                         showAlert('Tên đăng nhập đã tồn tại! Vui lòng chọn tên khác.', 'error');
+                         return;
+                     }
+                     
+                     // Thêm nhân viên mới vào hệ thống
+                     const newUser = addUser(userData);
+                     
+                     showAlert(`Đã thêm ${getRoleDisplayName(userData.role)}: ${userData.username} thành công!`, 'success');
+                     
+                     // Reset form
+                     this.reset();
+                     
+                     // Chuyển về tab quản lý nhân viên
+                     showTab('user-management');
+                 });
+             }
+             
+             // Setup profile edit form
+             const profileEditForm = document.getElementById('profile-edit-form');
+             if (profileEditForm) {
+                 profileEditForm.addEventListener('submit', function(e) {
+                     e.preventDefault();
+                     updateUserInfo();
+                 });
+             }
+             
+             // Setup edit user form
+             const editUserForm = document.getElementById('edit-user-form');
+             if (editUserForm) {
+                 editUserForm.addEventListener('submit', function(e) {
+                     e.preventDefault();
+                     
+                     if (!validateForm(this)) {
+                         showAlert('Vui lòng điền đầy đủ thông tin bắt buộc!', 'error');
+                         return;
+                     }
+                     
+                     // Lấy thông tin từ form
+                     const formData = new FormData(this);
+                     const newUsername = formData.get('username').trim();
+                     const newEmail = formData.get('email').trim();
+                     const newPassword = formData.get('password').trim();
+                     const newRole = formData.get('role');
+                     
+                     // Kiểm tra tên đăng nhập đã tồn tại chưa (trừ nhân viên đang chỉnh sửa)
+                     const existingUser = người_dùng.find(user => 
+                         user.username === newUsername && user.id != window.currentEditUserId
+                     );
+                     if (existingUser) {
+                         showAlert('Tên đăng nhập đã tồn tại! Vui lòng chọn tên khác.', 'error');
+                         return;
+                     }
+                     
+                     // Tìm và cập nhật nhân viên
+                     const userIndex = người_dùng.findIndex(u => u.id == window.currentEditUserId);
+                     if (userIndex > -1) {
+                         const oldUser = người_dùng[userIndex];
+                         const oldRole = oldUser.role;
+                         
+                         // Cập nhật thông tin cơ bản
+                         người_dùng[userIndex].username = newUsername;
+                         người_dùng[userIndex].email = newEmail;
+                         người_dùng[userIndex].role = newRole;
+                         
+                         // Cập nhật mật khẩu nếu có nhập
+                         if (newPassword) {
+                             người_dùng[userIndex].password = newPassword;
+                         }
+                         
+                         // Cập nhật danh sách kỹ thuật viên nếu cần
+                         if (oldRole === 'technician' && newRole !== 'technician') {
+                             // Xóa khỏi danh sách kỹ thuật viên
+                             const techIndex = kỹ_thuật_viên.findIndex(t => t.id == window.currentEditUserId);
+                             if (techIndex > -1) {
+                                 kỹ_thuật_viên.splice(techIndex, 1);
+                             }
+                         } else if (oldRole !== 'technician' && newRole === 'technician') {
+                             // Thêm vào danh sách kỹ thuật viên
+                             kỹ_thuật_viên.push({
+                                 id: người_dùng[userIndex].id,
+                                 username: newUsername
+                             });
+                         } else if (newRole === 'technician') {
+                             // Cập nhật tên trong danh sách kỹ thuật viên
+                             const techIndex = kỹ_thuật_viên.findIndex(t => t.id == window.currentEditUserId);
+                             if (techIndex > -1) {
+                                 kỹ_thuật_viên[techIndex].username = newUsername;
+                             }
+                         }
+                         
+                         // Lưu vào localStorage
+                         saveDataToStorage();
+                         
+                         // Cập nhật giao diện
+                         updateUserGrid();
+                         
+                         // Đóng modal
+                         closeModal('editUserModal');
+                         
+                         showAlert(`Đã cập nhật thông tin ${getRoleDisplayName(newRole)}: ${newUsername} thành công!`, 'success');
+                         
+                         // Reset form
+                         this.reset();
+                     } else {
+                         showAlert('Không tìm thấy nhân viên để cập nhật!', 'error');
+                     }
+                 });
+             }
+          });
+     </script>
+</body>
+</html>

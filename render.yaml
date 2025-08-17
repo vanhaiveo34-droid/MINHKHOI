@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: hai-tools-system
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app_sqlite:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.16
+      - key: SECRET_KEY
+        generateValue: true

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}HỆ THỐNG ĐIỀU PHIẾU MINH KHÔI{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% if current_user.is_authenticated %}
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-tools"></i> HỆ THỐNG ĐIỀU PHIẾU
+                </div>
+                <nav>
+                    <ul class="nav-menu">
+                        <li><a href="{{ url_for('dashboard') }}"><i class="fas fa-home"></i> Trang chủ</a></li>
+                        {% if current_user.role in ['kinh_doanh', 'quan_tri_vien'] %}
+                        <li><a href="{{ url_for('new_ticket') }}"><i class="fas fa-plus"></i> Tạo phiếu</a></li>
+                        {% endif %}
+                        {% if current_user.role == 'quan_tri_vien' %}
+                        <li><a href="{{ url_for('admin_users') }}"><i class="fas fa-users"></i> Quản lý nhân viên</a></li>
+                        {% endif %}
+                        <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+                        <li><span class="user-info">
+                            <i class="fas fa-user"></i> {{ current_user.username }} 
+                            ({% if current_user.role == 'quan_tri_vien' %}Quản trị viên
+                            {% elif current_user.role == 'quan_ly' %}Quản lý
+                            {% elif current_user.role == 'kinh_doanh' %}Kinh doanh
+                            {% elif current_user.role == 'ky_thuat_vien' %}Kỹ thuật viên
+                            {% else %}{{ current_user.role }}{% endif %})
+                        </span></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    {% endif %}
+
+    <main class="main-content">
+        <div class="container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ 'error' if category == 'error' else category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

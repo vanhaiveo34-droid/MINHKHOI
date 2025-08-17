@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Tạo phiếu mới - Hệ thống Quản lý Phiếu Kỹ thuật{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1 style="margin-bottom: 2rem; color: #667eea;">
+        <i class="fas fa-plus-circle"></i> Tạo phiếu mới
+    </h1>
+    
+    <form method="POST" action="{{ url_for('new_ticket') }}">
+        <div class="grid grid-2">
+            <div class="form-group">
+                <label for="customer_name" class="form-label">
+                    <i class="fas fa-user"></i> Tên khách hàng *
+                </label>
+                <input type="text" id="customer_name" name="customer_name" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="customer_phone" class="form-label">
+                    <i class="fas fa-phone"></i> Số điện thoại *
+                </label>
+                <input type="tel" id="customer_phone" name="customer_phone" class="form-control" required>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="customer_address" class="form-label">
+                <i class="fas fa-map-marker-alt"></i> Địa chỉ khách hàng *
+            </label>
+            <textarea id="customer_address" name="customer_address" class="form-control" rows="3" required></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="customer_location" class="form-label">
+                <i class="fas fa-location-arrow"></i> Định vị công ty (tọa độ GPS)
+            </label>
+            <input type="text" id="customer_location" name="customer_location" class="form-control" 
+                   placeholder="Ví dụ: 10.7769, 106.7009">
+            <small class="form-text text-muted">Nhập tọa độ GPS hoặc để trống</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="description" class="form-label">
+                <i class="fas fa-clipboard-list"></i> Mô tả công việc *
+            </label>
+            <textarea id="description" name="description" class="form-control" rows="4" required 
+                      placeholder="Mô tả chi tiết công việc cần thực hiện..."></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="priority" class="form-label">
+                <i class="fas fa-exclamation-triangle"></i> Độ ưu tiên
+            </label>
+            <select id="priority" name="priority" class="form-select">
+                <option value="thap">Thấp</option>
+                <option value="trung_binh" selected>Trung bình</option>
+                <option value="cao">Cao</option>
+                <option value="khan_cap">Khẩn cấp</option>
+            </select>
+        </div>
+        
+        <div style="text-align: right; margin-top: 2rem;">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Tạo phiếu
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+// Auto-format phone number
+document.getElementById('customer_phone').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 0) {
+        if (value.length <= 3) {
+            value = value;
+        } else if (value.length <= 6) {
+            value = value.slice(0, 3) + ' ' + value.slice(3);
+        } else if (value.length <= 10) {
+            value = value.slice(0, 3) + ' ' + value.slice(3, 6) + ' ' + value.slice(6);
+        } else {
+            value = value.slice(0, 3) + ' ' + value.slice(3, 6) + ' ' + value.slice(6, 8) + ' ' + value.slice(8, 10);
+        }
+    }
+    e.target.value = value;
+});
+
+// Character counter for description
+document.getElementById('description').addEventListener('input', function(e) {
+    const maxLength = 500;
+    const currentLength = e.target.value.length;
+    const counter = document.getElementById('char-counter') || createCharCounter();
+    
+    counter.textContent = `${currentLength}/${maxLength} ký tự`;
+    
+    if (currentLength > maxLength * 0.9) {
+        counter.style.color = '#dc3545';
+    } else if (currentLength > maxLength * 0.7) {
+        counter.style.color = '#ffc107';
+    } else {
+        counter.style.color = '#666';
+    }
+});
+
+function createCharCounter() {
+    const counter = document.createElement('div');
+    counter.id = 'char-counter';
+    counter.style.textAlign = 'right';
+    counter.style.fontSize = '0.8rem';
+    counter.style.color = '#666';
+    counter.style.marginTop = '0.5rem';
+    
+    const descriptionGroup = document.getElementById('description').parentNode;
+    descriptionGroup.appendChild(counter);
+    
+    return counter;
+}
+</script>
+{% endblock %}

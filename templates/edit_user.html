@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "base.html" %}
 
 {% block title %}Chỉnh sửa nhân viên - Hệ thống Quản lý Phiếu Kỹ thuật{% endblock %}
@@ -91,3 +92,98 @@
 .badge i { margin-right: 5px; }
 </style>
 {% endblock %}
+=======
+{% extends "base.html" %}
+
+{% block title %}Chỉnh sửa nhân viên - Hệ thống Quản lý Phiếu Kỹ thuật{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1 style="margin-bottom: 2rem; color: #667eea;">
+        <i class="fas fa-user-edit"></i> Chỉnh sửa nhân viên: {{ user.username }}
+    </h1>
+    
+    <form method="POST" action="{{ url_for('edit_user', user_id=user.id) }}">
+        <div class="grid grid-2">
+            <div class="form-group">
+                <label for="username" class="form-label">
+                    <i class="fas fa-user"></i> Tên đăng nhập *
+                </label>
+                <input type="text" id="username" name="username" class="form-control" 
+                       value="{{ user.username }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email" class="form-label">
+                    <i class="fas fa-envelope"></i> Email *
+                </label>
+                <input type="email" id="email" name="email" class="form-control" 
+                       value="{{ user.email }}" required>
+            </div>
+        </div>
+        
+        <div class="grid grid-2">
+            <div class="form-group">
+                <label for="password" class="form-label">
+                    <i class="fas fa-lock"></i> Mật khẩu mới
+                </label>
+                <input type="password" id="password" name="password" class="form-control" 
+                       placeholder="Để trống nếu không thay đổi">
+                <small class="form-text text-muted">Chỉ nhập khi muốn thay đổi mật khẩu</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="role" class="form-label">
+                    <i class="fas fa-user-tag"></i> Vai trò *
+                </label>
+                <select id="role" name="role" class="form-select" required>
+                    <option value="quan_tri_vien" {% if user.role == 'quan_tri_vien' %}selected{% endif %}>Quản trị viên</option>
+                    <option value="quan_ly" {% if user.role == 'quan_ly' %}selected{% endif %}>Quản lý</option>
+                    <option value="kinh_doanh" {% if user.role == 'kinh_doanh' %}selected{% endif %}>Kinh doanh</option>
+                    <option value="ky_thuat_vien" {% if user.role == 'ky_thuat_vien' %}selected{% endif %}>Kỹ thuật viên</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">
+                <i class="fas fa-calendar"></i> Ngày tạo tài khoản
+            </label>
+            <input type="text" class="form-control" value="{{ user.created_at.strftime('%d/%m/%Y %H:%M') }}" readonly>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">
+                <i class="fas fa-circle"></i> Trạng thái hiện tại
+            </label>
+            <div>
+                {% if user.is_online %}
+                    <span class="badge badge-success">
+                        <i class="fas fa-circle"></i> Online
+                    </span>
+                {% else %}
+                    <span class="badge badge-secondary">
+                        <i class="fas fa-circle"></i> Offline
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div style="text-align: right; margin-top: 2rem;">
+            <a href="{{ url_for('admin_users') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Cập nhật nhân viên
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+.badge-success { background-color: #28a745; }
+.badge-secondary { background-color: #6c757d; }
+.badge i { margin-right: 5px; }
+</style>
+{% endblock %}
+>>>>>>> cad4acc09904766658dc682f1d2e0e72db707bbf

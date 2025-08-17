@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 Flask==2.3.3
 Flask-SQLAlchemy==3.0.5
 Flask-Login==0.6.3
 Werkzeug==2.3.7
 gunicorn==21.2.0
+=======
+Flask==2.3.3
+Flask-SQLAlchemy==3.0.5
+Flask-Login==0.6.3
+Werkzeug==2.3.7
+gunicorn==21.2.0
+>>>>>>> cad4acc09904766658dc682f1d2e0e72db707bbf

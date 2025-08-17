@@ -1,0 +1,21 @@
+{
+  "name": "he-thong-dieu-phieu-minh-khoi",
+  "version": "1.0.0",
+  "description": "Hệ thống điều phiếu Minh Khôi - Phiên bản Demo",
+  "main": "index.html",
+  "scripts": {
+    "start": "echo 'Static site - no build required'",
+    "build": "echo 'Static site - no build required'"
+  },
+  "keywords": [
+    "ticket-management",
+    "vietnamese",
+    "static-site"
+  ],
+  "author": "Hải Ú",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vanhaiveo34-droid/MINHKHOI"
+  }
+}

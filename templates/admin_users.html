@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block title %}Quản lý người dùng - HỆ THỐNG ĐIỀU PHIẾU MINH KHÔI{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1 style="color: #667eea;">
+            <i class="fas fa-users"></i> Quản lý người dùng
+        </h1>
+        <div>
+            <a href="{{ url_for('register') }}" class="btn btn-success">
+                <i class="fas fa-user-plus"></i> Thêm người dùng mới
+            </a>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Quay lại Dashboard
+            </a>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ 'danger' if category == 'loi' else 'success' }}" style="margin-bottom: 1rem;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên đăng nhập</th>
+                    <th>Email</th>
+                    <th>Vai trò</th>
+                    <th>Ngày tạo</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>
+                        <strong>{{ user.username }}</strong>
+                        {% if user.id == current_user.id %}
+                            <span class="badge badge-primary">Bạn</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        {% if user.role == 'quan_tri_vien' %}
+                            <span class="badge badge-danger">Quản trị viên</span>
+                        {% elif user.role == 'quan_ly' %}
+                            <span class="badge badge-warning">Quản lý</span>
+                        {% elif user.role == 'kinh_doanh' %}
+                            <span class="badge badge-info">Kinh doanh</span>
+                        {% else %}
+                            <span class="badge badge-success">Kỹ thuật viên</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ user.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td>
+                        {% if user.id != current_user.id %}
+                            <button onclick="confirmDelete({{ user.id }}, '{{ user.username }}')" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash"></i> Xóa
+                            </button>
+                        {% else %}
+                            <span class="text-muted">Không thể xóa</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Thống kê -->
+    <div class="stats-grid" style="margin-top: 2rem;">
+        <div class="stat-card">
+            <div class="stat-number">{{ users|length }}</div>
+            <div class="stat-label">Tổng số người dùng</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ users|selectattr('role', 'equalto', 'quan_tri_vien')|list|length }}</div>
+            <div class="stat-label">Quản trị viên</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ users|selectattr('role', 'equalto', 'quan_ly')|list|length }}</div>
+            <div class="stat-label">Quản lý</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ users|selectattr('role', 'equalto', 'kinh_doanh')|list|length }}</div>
+            <div class="stat-label">Kinh doanh</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ users|selectattr('role', 'equalto', 'ky_thuat_vien')|list|length }}</div>
+            <div class="stat-label">Kỹ thuật viên</div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal xác nhận xóa -->
+<div id="deleteModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <h3>Xác nhận xóa</h3>
+        <p>Bạn có chắc chắn muốn xóa người dùng <strong id="deleteUserName"></strong>?</p>
+        <p class="text-danger">Hành động này không thể hoàn tác!</p>
+        <div style="text-align: right; margin-top: 1rem;">
+            <button onclick="closeDeleteModal()" class="btn btn-secondary">Hủy</button>
+            <form id="deleteForm" method="POST" style="display: inline;">
+                <button type="submit" class="btn btn-danger">Xóa</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+}
+
+.badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.badge-primary { background-color: #007bff; color: white; }
+.badge-danger { background-color: #dc3545; color: white; }
+.badge-warning { background-color: #ffc107; color: black; }
+.badge-info { background-color: #17a2b8; color: white; }
+.badge-success { background-color: #28a745; color: white; }
+</style>
+
+<script>
+function confirmDelete(userId, username) {
+    document.getElementById('deleteUserName').textContent = username;
+    document.getElementById('deleteForm').action = `/admin/users/${userId}/delete`;
+    document.getElementById('deleteModal').style.display = 'block';
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteModal').style.display = 'none';
+}
+
+// Đóng modal khi click bên ngoài
+window.onclick = function(event) {
+    const modal = document.getElementById('deleteModal');
+    if (event.target == modal) {
+        modal.style.display = 'none';
+    }
+}
+</script>
+{% endblock %}

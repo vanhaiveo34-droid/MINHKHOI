@@ -1,0 +1,29 @@
+# Git Commands to Push Code
+# Run these commands in PowerShell after installing Git
+
+# 1. Configure Git (replace with your info)
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+
+# 2. Initialize repository (if not already done)
+git init
+
+# 3. Add all files
+git add .
+
+# 4. Commit changes
+git commit -m "Fix admin_users endpoint and add user management features"
+
+# 5. Add remote origin (replace URL with your repository URL)
+git remote add origin https://github.com/username/TOOLS-DEMO.git
+
+# 6. Push to GitHub
+git push -u origin main
+
+# If main doesn't work, try master:
+# git push -u origin master
+
+# Sample repository URLs:
+# https://github.com/yourusername/TOOLS-DEMO.git
+# https://github.com/yourusername/hai-tools-system.git
+# https://github.com/yourusername/ticket-management.git
